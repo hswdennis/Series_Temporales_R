@@ -1,6 +1,6 @@
 # Series Temporales en R
 
-![meteorite logo](img/🌍☄️Meteorite_Landing.png)
+![banner_serie_temporal](img/banner.png)
 
 ## Introducción
 
