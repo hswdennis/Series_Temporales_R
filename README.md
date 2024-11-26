@@ -194,7 +194,7 @@ autoplot(forecast(t_fitARIMA_4),h=24)
 
 Como mencioné al principio, nuestros datos iban dese el año 1995 hasta el 2020, pero trabajamos del 2000 al 2015, tenemos la suerte de poder comparar la predicción con los datos reales (las imágenes están alineadas). 
 
-![Datos reales de temperatura](img/17_Datos_reales.png.png)
+![Datos reales de temperatura](img/18_Datos_reales.png.png)
 
 
 Observando las tres imágenes, se ve a primera vista que la estimación realizada con el modelo Holt-Winters parece la más ajustada. En los datos reales, se da que el año 2016 se generan picos de temperatura. Comparando y usando como referencia el año 2013, el 2016 sobre pasa muy levemente el pico de temperatura. Los intervalos de confianza en el modelo ARIMA son más “grandes”, lo que indica mayor margen de error, por el otro lado en el modelo Holt-Winters, el borde del intervalo de confianza del 95% coincide con los datos reales. Es por eso por lo que concluyo que el modelo Holt-Winters está mejor ajustado, sin embargo, el de ARIMA predice mejor ya que tiene en cuenta (y por eso dejo el margen) una mayor variación.
