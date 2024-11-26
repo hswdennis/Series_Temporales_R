@@ -76,7 +76,7 @@ summary(temperatura_sh)
 autoplot(temperatura_sh) + autolayer(fitted(temperatura_sh), series="Fitted") + ylab("Temperatura") + xlab("Año")
 ```
 
-![descomposicion_estacional_2](img/7_Suavizado_Holt.png)
+![Suavizado holt](img/7_Suavizado_Holt.png)
 
 ### Método alisado Holt-Winters
 
@@ -89,7 +89,7 @@ summary(fit1)
 autoplot(fit1) + autolayer(fitted(fit1), series="Fitted") + ylab("temperatura)") + xlab("Año")
 ```
 
-![descomposicion_estacional_2](img/8_Suavizado_Holt_Winters.png)
+![Suavizado Holt-Winters](img/8_Suavizado_Holt_Winters.png)
 
 Concluimos que el método que mejor ajusta y predice nuestra serie es el método de alisado de Holt-Winters. Gracias a la función  *summary()* del modelo ganador obtenemos los siguientes valores de Alpha, Beta y Gamma con el que construir la expresión del método ganador.
 
@@ -101,7 +101,7 @@ b_t=〖1e-04 (L〗_t-L_(t-1 ))+ 1e-04 b_(t-1)
 
 x ̂𝑡+1 = (𝐿𝑡 + 𝑏𝑡 ) 𝑆𝑡−𝑠+1
 
-![descomposicion_estacional_2](img/9_Expression.png)
+![Expresion algebraica](img/9_Expression.png)
 
 ## Funciones de autocorrelación simple y espacial
 
@@ -111,13 +111,13 @@ Es el momento de extraer los valores de autocorrelación simple (ACF) y espacial
 ggAcf(temperatura_TR, lag=48)
 ```
 
-![descomposicion_estacional_2](img/10_Correlacion_ACF.png)
+![Correlacion ACE](img/10_Correlacion_ACF.png)
 
 ```
 ggPacf(temperatura_TR,lag=48) 
 ```
 
-![descomposicion_estacional_2](img/10_Correlacion_PACF.png)
+![Correlacion PACE](img/10_Correlacion_PACF.png)
 
 Recordamos que la variable temperatura_TR es la ventana de datos extraídos para la parte de predicción, desde el año 2000 hasta el 2014.
 
@@ -126,17 +126,16 @@ Se observa un comportamiento repetitivo de las autocorrelaciones cada 12 meses e
 ```
 ggAcf(diff(temperatura_TR), lag=48)
 ```
-![descomposicion_estacional_2](img/12_Correlacion_ACF_12.png)
+![Correlacion ACE 2](img/12_Correlacion_ACF_12.png)
 
 ```
 ggPacf(diff(temperatura_TR), lag=48)
 ```
-![descomposicion_estacional_2](img/13_Correlacion_PACF_12.png)
+![Correlacion PACE 2](img/13_Correlacion_PACF_12.png)
 
 
 Procedamos a ajustar el modelo adecuado. Para ello, elaboraremos diferentes modelos con el fin de compararlos y elegir un ganador a través de la función *arima()*. 
 En el determinamos los parámetros del modelo siguiendo unos comportamientos en las gráficas de ACF y PACF. En este caso, como nuestra serie tiene una estacionalidad 12, solo hay que observar los retardos múltiplos de 12. 
-
 
 ```
 t_fitARIMA_1<-arima(temperatura_TR,order=c(0,1,0), seasonal=c(0,1,1))
@@ -149,23 +148,23 @@ Con la función *summary()* seremos capaces de recuperar los coeficientes sigma 
 
 ### Modelo 1
 
-![descomposicion_estacional_2](img/Modelo_1res.png)
-![descomposicion_estacional_2](img/Modelo_1pic.png)
+![Modelo 1 resultados](img/Modelo_1res.png)
+![Modelo 1 imagen](img/Modelo_1pic.png)
 
 ### Modelo 2
 
-![descomposicion_estacional_2](img/Modelo_2res.png)
-![descomposicion_estacional_2](img/Modelo_2pic.png)
+![Modelo 2 resultados](img/Modelo_2res.png)
+![Modelo 2 imagen](img/Modelo_2pic.png)
 
 ### Modelo 3
 
-![descomposicion_estacional_2](img/Modelo_3res.png)
-![descomposicion_estacional_2](img/Modelo_3pic.png)
+![Modelo 3 resultados](img/Modelo_3res.png)
+![Modelo 3 imagen](img/Modelo_3pic.png)
 
 ### Modelo 4
 
-![descomposicion_estacional_2](img/Modelo_4res.png)
-![descomposicion_estacional_2](img/Modelo_4pic.png)
+![Modelo 4 resultados](img/Modelo_4res.png)
+![Modelo 4 imagen](img/Modelo_4pic.png)
 
 ### Resultados
 
@@ -175,17 +174,28 @@ Después de un análisis, selecciono como ganador el modelo 4. El factor diferen
 
 La expresión algebraica del modelo ganador es la siguiente:
 
-```math
-(1 - 0.0212B)(1 – B4)(1 - B)Xt = (1 - 0.4409B)Zt
-(1 - 0.0212B)(1 – B4)(Xt - Xt-1) = -0.4409Zt-4 + Zt
-(1 - 0.0212B)(Xt – Xt-1 - Xt-4 + Xt+5 ) = -0.4409Zt-4 + Zt
-Xt – Xt-1 - Xt-4 + Xt+5 – 0.02Xt-1 - 0.02Xt-2 - 0.02Xt-5 - 0.02Xt-6 = -0.4409Zt-4 + Zt
-Xt – 1.02Xt-1 + 0.02Xt-2 - Xt+4 + 1.02Xt-5 - 0.02Xt-6 = -0.4409Zt-4 + Zt
-Xt = 1.02Xt-1 - 0.02Xt-2 + Xt+4 - 1.02Xt-5 + 0.02Xt-2 = -0.4409Zt-4 + Zt
+![Expresion_algebraica_2](img/15_Expression.png)
 
-Xt = 1.02Xt-1 - 0.02Xt-2 + Xt+4 - 1.02Xt-5 + 0.02Xt-2 = -0.4409Zt-4 + Zt
+## Predicciones e intervalos de confianza
+
+Es el momento de calcular la predicción y los intervalos de confianza para el modelo ganador (modelo 4). La función *forecast()* recibe el modelo deseado y el numero de unidades a predecir. En este caso, veo razonable intentar predecir **24 meses**. 
+
+```
+# Calculo de las predicciones y los intervalos de confianza para el modelo mas adecuado (t_fitARIMA_4)
+forecast(t_fitARIMA_4,h=24)
+summary(forecast(t_fitARIMA_4,h=24))
+
+# Representar las predicciones obtenidas
+autoplot(forecast(t_fitARIMA_4),h=24)
 ```
 
+![Prediccion modelo ARIMA](img/16_Prediccion_modelo_ARIMA.png)
+![Prediccion modelo Holt-Winters](img/17_Prediccion_modelo_HoltWinters.png)
+
+Como mencioné al principio, nuestros datos iban dese el año 1995 hasta el 2020, pero trabajamos del 2000 al 2015, tenemos la suerte de poder comparar la predicción con los datos reales (las imágenes están alineadas). 
+
+![Datos reales de temperatura](img/17_Datos_reales.png.png)
 
 
+Observando las tres imágenes, se ve a primera vista que la estimación realizada con el modelo Holt-Winters parece la más ajustada. En los datos reales, se da que el año 2016 se generan picos de temperatura. Comparando y usando como referencia el año 2013, el 2016 sobre pasa muy levemente el pico de temperatura. Los intervalos de confianza en el modelo ARIMA son más “grandes”, lo que indica mayor margen de error, por el otro lado en el modelo Holt-Winters, el borde del intervalo de confianza del 95% coincide con los datos reales. Es por eso por lo que concluyo que el modelo Holt-Winters está mejor ajustado, sin embargo, el de ARIMA predice mejor ya que tiene en cuenta (y por eso dejo el margen) una mayor variación.
 
